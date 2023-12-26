@@ -177,3 +177,80 @@ export const followAndUnfollow = async (req, res) => {
     }
 };
 
+
+//update password
+export const updatePassword = async(req, res) => {
+
+    try {
+        
+        const user = await User.findById(req.user._id).select("+password");
+        const {oldPassword, newPassword} = req.body;
+
+        if(!oldPassword || !newPassword){
+
+            return res.status(400).json({
+                success: false,
+                message: "enter all the fields",
+            });
+        }
+
+        const isCorrect = await user.comparePassword(oldPassword);
+
+        if(!isCorrect){
+
+            return res.status(400).json({
+                success: false,
+                message: "incorrect old password",
+            });
+        }
+
+        user.password = newPassword;
+        await user.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "password updated",
+        });
+    } 
+    catch (error) {
+        
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+
+//update profile
+export const updateProfile = async(req, res) => {
+
+    try {
+        
+        const user = await User.findById(req.user._id);
+        const {name, email} = req.body;
+
+        if(name){
+            user.name = name;
+        }
+
+        if(email){
+            user.email = email;
+        }
+
+        await user.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "profile updated",
+        });
+    } 
+    catch (error) {
+        
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
