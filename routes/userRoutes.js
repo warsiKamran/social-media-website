@@ -1,5 +1,5 @@
 import express from "express";
-import { followAndUnfollow, login, logout, signup, updatePassword, updateProfile } from "../controllers/userController.js";
+import { deleteMyProfile, followAndUnfollow, login, logout, signup, updatePassword, updateProfile } from "../controllers/userController.js";
 import { isAuthenticated } from "../middlewares/isAuthenticated.js";
 
 const router = express.Router();
@@ -22,6 +22,9 @@ router.route("/update/password").put(isAuthenticated, updatePassword);
 
 //update profile
 router.route("/update/profile").put(isAuthenticated, updateProfile);
+
+//delete profile
+router.route("/delete/me").delete(isAuthenticated, deleteMyProfile);
 
 export default router;
 

@@ -1,3 +1,4 @@
+import { Post } from "../models/Post.js";
 import { User } from "../models/User.js";
 import { sendToken } from "../utils/sendToken.js";
 
@@ -254,3 +255,60 @@ export const updateProfile = async(req, res) => {
     }
 };
 
+
+//delete user and it's posts also removing it from the person's whom he is following
+export const deleteMyProfile = async(req, res) => {
+
+    try {
+        
+        const user = await User.findById(req.user._id);
+        const posts = user.posts;
+
+        const following = user.following;
+        const followers = user.followers;
+        const userId = user._id;
+
+        await user.deleteOne();
+
+        //deleting all the posts
+        for (let i = 0; i < posts.length; i++){
+
+            const post = await Post.findById(posts[i]);
+            await post.deleteOne();
+        }
+
+        //removing from the person's whom he is following
+        for (let i = 0; i < followers.length; i++) {
+            
+            const follower = await User.findById(followers[i]);
+            const index = follower.following.indexOf(userId);
+
+            follower.following.splice(index, 1);
+            await follower.save();
+        }
+
+        for (let i = 0; i < following.length; i++) {
+            
+            const follows = await User.findById(following[i]);
+            const index = follows.followers.indexOf(userId);
+
+            follows.followers.splice(index, 1);
+            await follows.save();
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "profile deleted",
+        });
+    } 
+    catch (error) {
+        
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+
+//myProfile,  getUserProfile

@@ -175,3 +175,45 @@ export const getPost = async(req, res) => {
     }
 };
 
+
+//update post caption
+export const updateCaption = async(req, res) => {
+
+    try {
+        
+        const post = await Post.findById(req.params.id);
+        const {caption} = req.body;
+
+        if(!post){
+            return res.status(404).json({
+                success: false,
+                message: "post not found",
+            });
+        }
+
+        if(post.owner.toString() !== req.user._id.toString()){
+
+            return res.status(401).json({
+                success: false,
+                message: "unauthorized user",
+            });
+        }
+
+        post.caption = caption;
+        await post.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "caption updated",
+        });
+    } 
+    catch (error) {
+        
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+}
+
+
