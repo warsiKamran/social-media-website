@@ -256,7 +256,7 @@ export const updateProfile = async(req, res) => {
 };
 
 
-//delete user and it's posts also removing it from the person's whom he is following
+//delete user and it's posts also removing it from the person's whom he is following and vice versa
 export const deleteMyProfile = async(req, res) => {
 
     try {
@@ -311,4 +311,76 @@ export const deleteMyProfile = async(req, res) => {
 };
 
 
-//myProfile,  getUserProfile
+//myProfile
+export const getMyProfile = async(req, res)=> {
+
+    try {
+        
+        const user = await User.findById(req.user._id).populate("posts");
+
+        res.status(200).json({
+            success: true,
+            user,
+        });
+    } 
+    catch (error) {
+        
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+
+//get other user's profile
+export const getUserProfile = async(req, res) => {
+
+    try {
+        
+        const {user_id} = req.params;
+        const user = await User.findById(user_id).populate("posts");
+
+        if(!user){
+            return res.status(404).json({
+                success: false,
+                message: "user not found",
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            user,
+        });
+    } 
+    catch (error) {
+        
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+
+//get all users
+export const getAllUsers = async(req, res) => {
+
+    try {
+        
+        const allUsers = await User.find({});
+
+        res.status(200).json({
+            success: true,
+            allUsers,
+        });
+    } 
+    catch (error) {
+        
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
