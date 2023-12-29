@@ -32,14 +32,14 @@ const schema = new mongoose.Schema({
         },
     ],
 
-    comment: [
+    comments: [
         {
             user:{
                 type: mongoose.Schema.Types.ObjectId,
                 ref:"User",
             },
 
-            comments:{
+            comment:{
                 type: String,
                 // required: [true, "Comment cannot be empty"],
             },
