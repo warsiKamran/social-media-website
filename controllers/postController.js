@@ -214,7 +214,7 @@ export const updateCaption = async(req, res) => {
             message: error.message,
         });
     }
-}
+};
 
 
 //add and update comment
