@@ -12,7 +12,7 @@ export const sendEmail = async(to, subject, text) => {
         },
     });
 
-    await transporter.sendEmail({
+    await transporter.sendMail({
         to,
         subject,
         text

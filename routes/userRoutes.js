@@ -2,11 +2,13 @@ import express from "express";
 import { 
     deleteMyProfile, 
     followAndUnfollow, 
+    forgetPassword, 
     getAllUsers, 
     getMyProfile, 
     getUserProfile, 
     login, 
     logout, 
+    resetPassword, 
     signup, 
     updatePassword, 
     updateProfile
@@ -46,6 +48,14 @@ router.route("/profile/:user_id").get(isAuthenticated, getUserProfile);
 
 //get all users
 router.route("/users").get(isAuthenticated, getAllUsers);
+
+//forget password
+router.route("/forget/password").post(forgetPassword);
+
+//reset password
+router.route("/reset/password/:token").put(resetPassword);
+
+
 
 export default router;
 
