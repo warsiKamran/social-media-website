@@ -384,3 +384,32 @@ export const getAllUsers = async(req, res) => {
     }
 };
 
+
+//forgot passsword
+export const forgetPassword = async(req, res) => {
+
+    try {
+        
+        const email = req.body;
+        const user = await User.findOne({email});
+
+        if(!user){
+            res.status(404).json({
+                success: false,
+                message: "user not found",
+            });
+        }
+
+        const resetToken = await user.getResetToken();
+        await user.save();
+
+        
+    } 
+    catch (error){
+        
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
