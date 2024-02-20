@@ -409,6 +409,7 @@ export const forgetPassword = async(req, res) => {
         const message = `click on the link to reset your password. ${url}. If you have not requested then please ignore.`
 
         try {
+
             await sendEmail(user.email, "Reset Password", message);
 
             res.status(200).json({
@@ -448,7 +449,9 @@ export const resetPassword = async(req, res) => {
         const resetPasswordToken = crypto.createHash("sha256").update(token).digest("hex");
 
         const user = await User.findOne({
+
             resetPasswordToken,
+
             resetPasswordExpire: {
                 $gt: Date.now(),
             },
@@ -457,6 +460,7 @@ export const resetPassword = async(req, res) => {
         if(!user){
 
             return res.status(401).json({
+
                 success: false,
                 message: "token is invalid or has been expired",
             });
@@ -469,6 +473,7 @@ export const resetPassword = async(req, res) => {
         await user.save();
 
         return res.status(200).json({
+
             success: true,
             message: "password has been updated",
         });
@@ -476,6 +481,7 @@ export const resetPassword = async(req, res) => {
     catch (error) {
 
         res.status(500).json({
+            
             success: false,
             message: error.message,
         });

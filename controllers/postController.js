@@ -303,7 +303,6 @@ export const deleteComment = async(req, res) => {
             post.comments.forEach((item, index) => {
 
                 if(item._id.toString() === req.body.commentId.toString()){
-
                     return post.comments.splice(index, 1);
                 }
             });
@@ -320,7 +319,6 @@ export const deleteComment = async(req, res) => {
             post.comments.forEach((item, index) => {
 
                 if(item.user.toString() === req.user._id.toString()){
-
                     return post.comments.splice(index, 1);
                 }
             });
